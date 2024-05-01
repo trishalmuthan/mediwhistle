@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load socialaccount %}
+{% load django_bootstrap5 %}
+
+{% block styles %}
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<style>
+    body {
+        background: linear-gradient(135deg, #6B73FF 10%, #507CFF 100%);
+        color: #ffffff;
+        font-family: 'Nunito', sans-serif;
+    }
+    .container {
+        background-color: rgba(255, 255, 255, 0.93);
+        border-radius: 20px;
+        padding: 40px;
+        box-shadow: 0 12px 24px 0 rgba(31, 38, 135, 0.25);
+        margin: auto;
+        width: 80%;
+        max-width: 650px;
+        text-align: center;
+    }
+    .btn-custom {
+        border: none;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 18px;
+        padding: 12px 24px;
+        margin: 12px;
+        transition: all 0.3s ease-in-out;
+        cursor: pointer;
+        border-radius: 8px;
+        position: relative; /* Position relative for icon alignment */
+        overflow: hidden; /* Ensures no overflow outside the border */
+        background-image: linear-gradient(45deg, #4C5CFF 50%, #354CFF 50%);
+        background-size: 225% 100%;
+    }
+    .btn-primary i, .btn-secondary i {
+        margin-right: 8px;
+    }
+    .btn-primary:hover, .btn-secondary:hover {
+        background-position: 100% 0;
+        color: #fff;
+    }
+    @keyframes fadeIn {
+        from { opacity: 0; }
+        to { opacity: 1; }
+    }
+    .alert, .container {
+        animation: fadeIn 2s;
+    }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5" style="margin-top: 15% !important;"> 
+    <h1 class="mb-3 text-center" style="font-size: 54px;">MediWhistle</h1> 
+    <p class="lead" style="text-align:center; margin-bottom:5%">Keeping medical professionals <strong>accountable</strong>.</p>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+        {% if user.is_authenticated %}
+            {% if user.userprofile.is_site_admin%}
+            <a href="/all_documents" class="btn btn-primary btn-custom mb-3"><i class="fas fa-home"></i>Continue to Home Page</a>
+            {% else %}
+            <a href="/upload" class="btn btn-primary btn-custom mb-3"><i class="fas fa-home"></i>Continue to Home Page</a>
+            {% endif %}
+        {% else %}
+            <form action="{% provider_login_url 'google' %}" method="post">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary btn-custom mb-3"><i class="fab fa-google"></i>Sign in with Google</button> 
+            </form>
+            <button type="button" class="btn btn-secondary btn-custom" onclick="redirectToURL('/report-form/')"><i class="fas fa-user"></i>Continue as Guest</button>
+        {% endif %}
+    </div>
+</div>
+<script>
+  function redirectToURL(url) {
+    window.location.href = url;
+  }
+</script>
+{% endblock %}
+

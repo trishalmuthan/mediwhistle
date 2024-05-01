@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Detail</title>
+    <style>
+        h1 {
+            margin:1%;
+        }
+        table {
+            border-collapse: collapse;
+            width: 90%;
+            margin: 20px 0;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-left:auto;
+            margin-right:auto;
+        }
+        th, td {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        button {
+            margin-bottom:1%;
+        }
+    </style>
+</head>
+<body style="text-align: center;">
+    <h1>Submission Detail</h1>
+ 
+    <table>
+        <tr>
+          <th>Status</th>
+          <td>{{ form.get_status_display }}</td>
+        </tr>
+        <tr>
+            <th>Subject</th>
+            <td>{{ form.subject }}</td>
+        </tr>
+        <tr>
+            <th>Name</th>
+            <td>{{ form.name }}</td>
+        </tr>
+        <tr>
+            <th>Email</th>
+            <td>{{ form.email }}</td>
+        </tr>
+        <tr>
+            <th>Doctor</th>
+            <td>{{ form.doctor }}</td>
+        </tr>
+        <tr>
+            <th>Location</th>
+            <td>{{ form.location }}</td>
+        </tr>
+        <tr>
+            <th>Practice</th>
+            <td>{{ form.practice }}</td>
+        </tr>
+        <tr>
+            <th>Message</th>
+            <td>{{ form.message }}</td>
+        </tr>
+        <tr>
+            <th>Comments</th>
+            
+            <td>{% if form.comments.all %}
+                <div class="comments">
+                {% for comment in form.comments.all %}
+                    <p><strong>(Admin) {{ comment.author.username }}:</strong> {{ comment.text }}</p>
+                {% endfor %}
+                </div>
+            {% else %}
+                No comments.
+            {% endif %}</td>
+        </tr>
+    </table>
+
+    {% if form.file %}
+        <button onclick="openDoc('embed_{{ form.id }}', this)" class="btn btn-warning">Open Attached File</button>
+        <center>
+        <div id="embed_{{ form.id }}" style="display: none;">
+            <embed src="{{ form.file.url }}"  width="100%" height="100%">
+        </div>
+        </center>
+    {% endif %}
+    <!-- You can display other information about the document as needed -->
+
+    {% if user.userprofile.is_site_admin %}
+        <a href="{% url 'comment_form' form.id %}" class="btn btn-dark" style="margin-bottom:1%">Add Comment</a>
+        <br>
+        <a href="{% url 'mark_as_resolved' form.id %}" class="btn btn-success" style="margin-bottom:1%">Mark as Resolved</a>
+        <form action="{% url 'admin_document_list' %}" method="get">
+            <button type="submit" class="btn btn-info">View All Submissions</button>
+        </form>
+    {% else %}
+        <form action="{% url 'user_document_list' %}" method="get">
+            <button type="submit" class="btn btn-info">View Your Submissions</button>
+        </form>
+
+    {% endif %}
+</body>
+
+
+<script>
+    function openDoc(embedId, button) {
+        var embedRow = document.getElementById(embedId);
+        if (embedRow.style.display === 'none') {
+            embedRow.style.display = 'table-row';
+            var embedElement = embedRow.querySelector('embed');
+            if (embedElement) {
+                embedElement.style.width = '80vw';
+                embedElement.style.height = '70vh';
+            }
+            button.textContent = 'Close File';
+        } else {
+            embedRow.style.display = 'none';
+            button.textContent = 'Open Attached File';
+        }
+    }
+ 
+ 
+ </script>
+
+</html>
+
+{% endblock content %}

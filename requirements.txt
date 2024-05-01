@@ -1,0 +1,7 @@
+gunicorn
+django-heroku
+dj-database-url
+django-allauth==0.61.1
+django-storages
+django_bootstrap5
+boto3

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% block content %}
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+
+<div class="container text-center">
+    <div class="py-5">
+        <h2 class="display-4 font-weight-normal">Submission Successful!</h2>
+        <p class="lead">Your submission has been successfully uploaded.</p>
+
+        {% if user.is_authenticated %}
+            <!-- Button to view user's own submissions, shown only to logged-in users -->
+            <form action="{% url 'user_document_list' %}" method="get" class="pt-3">
+                <button type="submit" class="btn btn-info btn-lg">View Your Submissions</button>
+            </form>
+
+            <form action="{% url 'report_form' %}" method="get" class="pt-3">
+                <button type="submit" class="btn btn-primary btn-lg">Submit another</button>
+            </form>
+
+        {% else %}
+            <form action="{% url 'report_form' %}" method="get" class="pt-3">
+                <button type="submit" class="btn btn-primary btn-lg">Submit another</button>
+            </form>
+
+            <form action="{% url 'home' %}" method="get" class="pt-3">
+                <button type="submit" class="btn btn-secondary btn-lg">Go back to Home</button>
+            </form>
+        {% endif %}
+
+    </div>
+</div>
+
+{% endblock %}

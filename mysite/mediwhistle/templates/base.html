@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mediwhistle</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        html, body {
+            height: 100%; /* Ensures the full height of the viewport is used */
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column; /* Stacks content vertically */
+            background-image: url('https://www.ucsfhealth.org/-/media/project/ucsf/ucsf-health/program/hero/autopsy-service-2x.jpg'); /* Background image from URL */
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* This makes the background image stay in place during scroll */
+            background-size: cover; /* This ensures the image covers the whole container */
+            height: 100%; 
+        }
+        .content {
+            flex: 1; /* Forces content to fill available space, pushing the footer down */
+        }
+        .navbar-custom {
+            background-color: #F84C1E; /* Navbar background */
+            background-image: linear-gradient(45deg, #F84C1E, #FF6347); /* Gradient effect */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+        }
+        .navbar-custom .navbar-brand,
+        .logout-btn {
+            color: #fff; /* Change text color for better visibility */
+        }
+        .navbar-custom .navbar-brand:hover,
+        .logout-btn:hover {
+            color: #F9DCBF; /* Gold color on hover for better contrast */
+        }
+        .logout-btn {
+            background-color: #232D4B; /* Slightly transparent white */
+            border-radius: 10px;
+            padding: 10px 10px;
+        }
+        footer {
+            padding: 10px 0;
+            background-color: #232D4B;
+            color: #fff;
+            text-align: center;
+            position: sticky;
+            bottom: 100000;
+            width: 100%;
+            padding-bottom: 10px;
+        }
+    </style>
+</head>
+<body data-user-authenticated="{% if user.is_authenticated %}true{% else %}false{% endif %}">
+
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-custom">
+    <a class="navbar-brand" href="/" id="mediwhistleHome">MediWhistle</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #232D4B;">
+                    Helpful Resources
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <a class="dropdown-item" href="https://www.whistleblowers.gov/" target="_blank">Whistleblower Protection Program</a>
+                    <a class="dropdown-item" href="https://constantinecannon.com/practice/whistleblower/whistleblower-types/healthcare-fraud/" target="_blank">Reporting Healthcare Fraud</a>
+                    <a class="dropdown-item" href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3128871/" target="_blank">Whistleblowing and Patient Safety</a>
+                </div>
+            </li>
+            <!-- Updated About Us Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="aboutDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: #232D4B;">
+                    About Us
+                </a>
+                <div class="dropdown-menu p-4 text-muted" aria-labelledby="aboutDropdown" style="width: auto !important; min-width: 600px !important;">
+                    <p>At MediWhistle, we are driven by a commitment to safeguarding healthcare integrity and promoting transparency. Founded by a dedicated team of computer science students, our app provides a secure platform for everyone to report unethical practices and safety violations without fear of retaliation.</p>
+                    <p>We believe in empowering individuals to speak up and contribute to a culture of accountability and improvement in medical environments.</p>
+                </div>
+            </li>
+        </ul>
+    </div>
+
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ml-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item">
+                <a class="nav-link logout-btn" href="{% url 'account_logout' %}">Logout</a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<div class="content">
+    {% block content %}
+    <!-- Page specific content will go here -->
+    {% endblock %}
+</div>
+
+<footer>
+    <div>© 2024 MediWhistle. All rights reserved.</div>
+    <div>DISCLAIMER: This whistleblower application has been created for a class project and does NOT actually report medical malpractice.</div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script>
+    $(document).ready(function() {
+        var isAuthenticated = $('body').data('user-authenticated') === 'true';
+        if (isAuthenticated) {
+            $('#mediwhistleHome').attr('href', '/upload');
+        }
+    });
+</script>
+</body>
+</html>

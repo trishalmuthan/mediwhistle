@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+  <style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        background-color: #f4f4f4;
+    }
+    .container {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+    h1 {
+        text-align: center; 
+        color: #333; 
+        padding: 10px;
+    }
+    table {
+        border-collapse: collapse;
+        width: 90%;
+        margin: 20px 0;
+        background-color: #fff;
+        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    th, td {
+        border: 1px solid #dddddd;
+        text-align: center;
+        padding: 8px;
+    }
+    th {
+        background-color: #007bff;
+        color: white;
+    }
+    tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .comments {
+        font-size: 0.9em;
+    }
+    .footer {
+        text-align: center;
+        width: 100%;
+        padding: 5px 0;
+        color: #fff;
+    }
+</style>
+<div class="alert alert-info" role="alert" style="margin-top:1%; margin-left:1%; margin-right:1%; text-align:center">
+  You are logged in as <strong>{{user.username}}</strong> and you are an admin! You are currently viewing all submissions.
+</div>
+    
+    <!-- Table to display submissions -->
+    <div class="container">
+      <table class="table table-bordered table-hover">
+        <thead>
+          <tr>
+            <th class="text-center">Subject</th>
+            <th class="text-center">Uploaded at</th>
+            <th class="text-center">User</th>
+            <th class="text-center">Status</th>
+            <th class="text-center">Actions</th>
+            <th class="text-center">Update Status</th>            
+          </tr>
+        </thead>
+        <tbody>
+          {% for form in forms %}
+            <tr>
+              <td>{{ form.subject }}</td>
+              <td>{{ form.uploaded_at }}</td>
+              <td>{{ form.user }}</td>
+              <td id="status_{{ form.id }}">{{ form.get_status_display }}</td>
+
+              <td>
+                <a href="{% url 'update_document_status' form.id %}" class="btn btn-secondary btn-sm">Open Submission</a>
+              </td>
+              <td>
+                <a href="{% url 'mark_as_resolved' form.id %}" class="btn btn-success btn-sm">Mark as Resolved</a>
+              </td>
+            </tr>
+            
+          {% empty %}
+            <tr>
+              <td colspan="8" class="text-center">No data.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+  </html>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Comment on Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> <!-- Include jQuery for simplicity -->
+</head>
+<body style="text-align:center;">
+    <h2 style="margin:1%">Add Comment to Submission: <u>{{ form.subject }}</u></h2>
+    <form id="comment-form" class="form-group">
+        {% csrf_token %}
+        <textarea name="comment" id="comment-textarea" style="width:40%" placeholder="Type your comment here." required></textarea>
+        <br>
+        <input type="button" id="submit-comment" class="btn btn-primary" value="Submit Comment">
+    </form>
+    <div id="comments-section">
+        <!-- New comments will appear here -->
+    </div>
+    <a href="{% url 'mark_as_resolved' form.id %}" class="btn btn-success" style="margin-bottom: 1%;">Mark as Resolved</a>
+
+    <div class="footer">
+        <a href="{% url 'view_document' form.id %}">Go back to submission</a>
+    </div>
+
+    <script>
+        document.getElementById('submit-comment').addEventListener('click', function() {
+            var commentText = document.getElementById('comment-textarea').value;
+            if (commentText.trim() === '') {
+                alert('Comment cannot be empty.');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('comment', commentText);
+            formData.append('csrfmiddlewaretoken', '{{ csrf_token }}');
+
+            fetch("{% url 'submit_comment' form.id %}", {
+                method: 'POST',
+                body: formData,
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.success) {
+                    // Append the new comment to the comments section
+                    var commentsSection = document.getElementById('comments-section');
+                    var newComment = document.createElement('p');
+                    newComment.textContent = `You added comment: ${data.comment}`;
+                    //newComment.textContent = `You added comment: ${data.author}: ${data.comment}`;
+                    commentsSection.appendChild(newComment);
+
+                    // Clear the textarea
+                    document.getElementById('comment-textarea').value = '';
+                } else {
+                    alert('Error submitting comment: ' + data.error);
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
+{% endblock content %}
