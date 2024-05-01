@@ -142,10 +142,10 @@ USE_TZ = True
 
 #STATIC_URL = 'static/'
 
-AWS_ACCESS_KEY_ID = 'AKIA2UC3FWJ6OISAUS45'
+AWS_ACCESS_KEY_ID = ''
 print(os.environ.get("AWS_SECRET_KEY"))
-AWS_SECRET_ACCESS_KEY = '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'
-AWS_STORAGE_BUCKET_NAME = 'cs3240static'
+AWS_SECRET_ACCESS_KEY = _ #INSERT SECRET KEY
+AWS_STORAGE_BUCKET_NAME = _ #INSERT BUCKET NAME
 AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
 AWS_S3_OBJECT_PARAMETERS = {
     'CacheControl': 'max-age=86400',
@@ -183,7 +183,7 @@ SOCIALACCOUNT_PROVIDERS = {
     'google': {
         "APP": {
             "client_id": "323900446720-v338gtvlsml4jbq7jtmgj13jm7rbj2jc.apps.googleusercontent.com",
-            "secret": "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",
+            "secret": "",
             "key": ""
         },
         'SCOPE': [
